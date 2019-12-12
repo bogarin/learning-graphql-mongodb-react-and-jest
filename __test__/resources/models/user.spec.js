@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import testMongo from "./../../../src/services/mongo";
 import UserModel from "./../../../src/resources/models/user";
-const User=UserModel({ mongoose }).userModel();
-const testConecction = testMongo({ mongoose });
+import config from "./../../../src/config";
+
+const User = UserModel({ mongoose }).userModel();
+const testConecction = testMongo();
 const userData = {
   name: "TekLoon",
   gender: "Male",
@@ -11,7 +13,16 @@ const userData = {
 };
 describe("Name of the group", () => {
   beforeAll(async () => {
-    await testConecction.connection();
+    testConecction.connection(
+      config.urlMongo,
+      config.dbMongo,
+      config.userMongo,
+      config.pwdMongo
+    );
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
   });
 
   it("create & save user successfully", async () => {

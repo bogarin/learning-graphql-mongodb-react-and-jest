@@ -1,41 +1,63 @@
-const connectionAth = mongoose => (dbURL, db, user, pwd) => {
-  mongoose.connect(`mongodb:${dbURL}${db}`, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
+import mongoose from "mongoose";
+import chalk from "./chalk";
+
+const connectionAth = (dbURL, db, user, pwd) => {
+  mongoose
+    .connect(`mongodb:${dbURL}${db}`, {
+      //poolSize: 10,
+      authSource: "admin",
       user: user,
-      pass: pwd
+      pass: pwd,
+      //useCreateIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     })
-    .then(
-      () => {
-        console.log("connection...");
-      },
-      err => {
-        console.log(`Fallo de conexion: ${err}`);
-      }
-    );
+    .catch(err => console.log(`No conecto ${err}`));
+  statusConnection(dbURL);
 };
 
-const connectionFree = mongoose => (dbURL, db) => {
-  mongoose.connect(`mongodb:${dbURL}${db}`, {
+const connectionFree = (dbURL, db) => {
+  mongoose
+    .connect(`mongodb:${dbURL}${db}`, {
       useUnifiedTopology: true,
       useNewUrlParser: true
     })
-    .then(
-      () => {
-        console.log("connection...");
-      },
-      err => {
-        console.log(`Fallo de conexion: ${err}`);
-      }
-    );
+    .catch(err => console.log(`No conecto ${err}`));
+  statusConnection(dbURL);
 };
-export default ({ mongoose }) => ({
-  connection: (dbURL, db, user, pwd) => {
-    const conAuntenticacion = connectionAth(mongoose);
-    const sinAuntenticacion = connectionFree(mongoose);
-    if (user !== undefined) {
-      conAuntenticacion(dbURL, db, user, pwd);
+
+const statusConnection = dbURL => {
+  mongoose.connection.on("connected", () =>
+    console.log(chalk.connected("Conectando a la base de datos de MongoDB", dbURL))
+  );
+
+  mongoose.connection.on("error", err =>
+    console.log(chalk.error("Error de conexion con la base de datos " + err + " error"))
+  );
+
+
+  mongoose.connection.on("disconnected", () =>
+    console.log(chalk.disconnected("desconexion a la base de datos"))
+  );
+  process.on("SIGINT", () => {
+    mongoose.connection.close(() => {
+      console.log(chalk.termination("Desconectada la aplicacion de la base de datos"));
+      process.exit(0);
+    });
+  });
+};
+
+export default () => ({
+  connection: async (dbURL, db, user = "", pwd = "") => {
+    if (user != "") {
+      connectionAth(dbURL, db, user, pwd);
+    } else {
+      connectionFree(dbURL, db);
     }
-    sinAuntenticacion(dbURL, db);
+  },
+  schemaMongo: (nameModel, schema) => {
+    const schemaModel = new mongoose.Schema(schema);
+    const model = mongoose.model(nameModel, schemaModel);
+    return model;
   }
 });

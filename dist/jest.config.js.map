@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/jest.config.js"],"names":["module","exports","testEnvironment","setupFiles"],"mappings":";;AAAAA,MAAM,CAACC,OAAP,GAAiB;AACbC,EAAAA,eAAe,EAAE,MADJ;AAEbC,EAAAA,UAAU,EAAE,CAAC,eAAD;AAFC,CAAjB","sourcesContent":["module.exports = {\n    testEnvironment: 'node',\n    setupFiles: [\"dotenv/config\"],\n  };"],"file":"jest.config.js"}

@@ -6,5 +6,5 @@ export default {
   urlMongo: process.env.MONGO_URL || "//localhost:1717",
   dbMongo: process.env.MONGO_DB || "/clientes",
   userMongo: process.env.MONGO_USER || "root",
-  pwdMongo: process.env.MONGO_PWD || "example"
+  pwdMongo: process.env.MONGO_PWD|| "example"
 };

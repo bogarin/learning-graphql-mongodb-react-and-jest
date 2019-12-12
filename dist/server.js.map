@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/server.js"],"names":["console","log","services"],"mappings":";;AAAA;;;;AACAA,OAAO,CAACC,GAAR,CAAYC,iBAAZ","sourcesContent":["import services from \"./services\";\nconsole.log(services);\n"],"file":"server.js"}

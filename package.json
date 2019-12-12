@@ -7,7 +7,7 @@
     "build": "babel src -d dist --source-maps",
     "start": "node dist/server.js",
     "test": "jest --setupFiles dotenv/config  --detectOpenHandles",
-    "watch": "nodemon --exec babel-node --ignore dist",
+    "watch": "nodemon --exec babel-node --ignore dist --ignore __test__ src/server.js",
     "clean": "rimraf  dist"
   },
   "dependencies": {
@@ -23,9 +23,10 @@
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
     "babel-jest": "^24.9.0",
-    "babel-node": "^0.0.1-security",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2"
   }
 }
