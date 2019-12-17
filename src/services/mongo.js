@@ -57,7 +57,7 @@ export default () => ({
   },
   schemaMongo: (nameModel, schema) => {
     const schemaModel = new mongoose.Schema(schema);
-    const model = mongoose.model(nameModel, schemaModel);
+    const model = new mongoose.model(nameModel, schemaModel);
     return model;
-  }
+  },
 });
